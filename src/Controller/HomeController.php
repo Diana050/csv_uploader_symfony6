@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\CsvFiles;
 use App\Form\CsvFileUploadType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -14,7 +15,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class HomeController extends AbstractController
 {
     #[Route('/home', name: 'app_home')]
-    public function upload(Request $request, SluggerInterface $slugger)
+    public function upload(Request $request, SluggerInterface $slugger,  EntityManagerInterface $entityManager)
     {
         $CsvFile = new CsvFiles();
         $form = $this->createForm(CsvFileUploadType::class, $CsvFile);
@@ -40,6 +41,9 @@ class HomeController extends AbstractController
 
                 $CsvFile->setCsvFileName($newFilename);
             }
+
+            $entityManager->persist($CsvFile);
+            $entityManager->flush();
 
             return $this->redirectToRoute('app_home');
         }
