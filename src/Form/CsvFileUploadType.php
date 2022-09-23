@@ -20,7 +20,7 @@ class CsvFileUploadType extends AbstractType
                 'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '10M',
+                        'maxSize' => '50M',
                         'mimeTypes' => [
                             'text/csv',
                         ],
